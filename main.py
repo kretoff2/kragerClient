@@ -1,6 +1,9 @@
 import json
+import time
 import requests
 import os.path
+import flet as ft
+from pages.mobile import sign_up_and_log_in
 
 config = None
 with open('config.json', 'r') as f:
@@ -42,57 +45,23 @@ with open('data.json', 'r') as f:
 def save_data():
     with open('data.json', 'w') as f:
         json.dump(userData, f)
-while True:
-    message = input(">> ").lower()
-    if message == "stop":
-        exit()
-    elif message == "1":
-        header = {"my_id": userData["account"]["id"], "deviceID":str(userData["deviceID"])}
-        print(header)
-        r = requests.get(f"http://{config['SERVER_IP']}:{config['SERVER_PORT']}", headers=header)
-        print(r.json())
-    else:
-        login = "kretoff"
-        password = "1234"
-        m = message.split(" ")
-        if m[0] == "sandreg":
-            data = {"email":m[1]}
-            dataJ = json.dumps(data)
-            r = requests.post(f"http://{config['SERVER_IP']}:{config['SERVER_PORT']}/sandReg", data=dataJ)
-            print(r.json())
-        elif m[0] == "test":
-            i = 0
-            for i in range(0, int(m[1])):
-                r = requests.get(f"http://{config['SERVER_IP']}:{config['SERVER_PORT']}/test")
-                print(r.json())
-                i+=1
-        elif m[0] =="reg":
-            data = {"cod":m[1], "tag":m[2], "password":m[3], "email":m[4], "id":m[5]}
-            dataJ = json.dumps(data)
-            r = requests.post(f"http://{config['SERVER_IP']}:{config['SERVER_PORT']}/reg", data=dataJ)
-            data = r.json()
-            if data['data'] == 'goodRegistration':
-                userData['staticKey'] = data['key']
-                userData["account"]["active"] = True
-                userData["account"]["tag"] = data["tag"]
-                userData["account"]["email"] = data["email"]
-                userData["account"]["id"] = data["id"]
-                save_data()
-        elif m[0] == "login":
-            data = {"tag":m[1], "password":m[2]}
-            dataJ = json.dumps(data)
-            r = requests.post(f"http://{config['SERVER_IP']}:{config['SERVER_PORT']}/login", data=dataJ)
-            data = r.json()
-            if data["data"] =="goodLogin":
-                print("good login")
-                userData["staticKey"] = data["key"]
-                userData["deviceID"] = data["deviceID"]
-                userData["account"]["active"] = True
-                userData["account"]["name"] = data["userInfo"]["login"]
-                userData["account"]["tag"] = data["userInfo"]["tag"]
-                userData["account"]["email"] = data["userInfo"]["email"]
-                userData["account"]["number"] = data["userInfo"]["num"]
-                userData["account"]["id"] = data["userInfo"]["userID"]
-                save_data()
-            else:print("no logined")
-        else:print("Sorry, but I don't understand you")
+
+def main(page:ft.Page):
+
+    page.title = "krager"
+    page.favicon = "assets/kragerLogo.jpg"
+    page.theme_mode = 'dark'
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.window_width = 600
+    page.window_height = 1000
+    page.window_resizable = False
+
+    now_page = sign_up_and_log_in
+    now_page.page = page
+    now_page.userData = userData
+    page.clean()
+    page.add(now_page.pageUI)
+    if now_page.enable_nav_bar == True:
+        page.navigation_bar = now_page.nav_bar
+    page.update()
+ft.app(target=main, assets_dir="assets")
