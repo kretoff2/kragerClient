@@ -22,6 +22,15 @@ def register(e):
     global enable_cod
     global my_id
     btn_reg.scale = 0.5
+    if user_pass.value != user_pass_double.value:
+        ErrorMessage.value = "Пароль и его повтор не совпадают"
+        ErrorMessage.color = ft.colors.RED
+        user_pass_double.value = ""
+        page.update()
+        time.sleep(0.1)
+        btn_reg.scale = 1
+        page.update()
+        return
     if user_cod.value == "" and enable_cod == False:
         body = {"email":user_email.value}
         bodyJ = json.dumps(body)
@@ -45,6 +54,8 @@ def register(e):
             userData["account"]["tag"] = data["tag"]
             userData["account"]["email"] = data["email"]
             userData["account"]["id"] = data["id"]
+            userData["deviceID"] = data["deviceID"]
+            userData["page"] = "messanger"
             save_data()
         elif data['data'] == 'invalidLogin':
             ErrorMessage.value = 'Это имя пользователя уже занято'
@@ -75,6 +86,7 @@ def log_in(e):
         userData["account"]["email"] = data["userInfo"]["email"]
         userData["account"]["number"] = data["userInfo"]["num"]
         userData["account"]["id"] = data["userInfo"]["userID"]
+        userData["page"] = "messanger"
         save_data()
     elif data['data'] == 'invalidLoginOrPassword':
         ErrorMessage.value = 'Неверное имя пользователя или пароль'
@@ -122,11 +134,15 @@ user_pass = ft.TextField(label='Пароль', width=300, on_change=validate, pa
 user_pass_double = ft.TextField(label='Повторите пароль', width=300, on_change=validate, password=True, color=ft.colors.AMBER_900)
 user_email = ft.TextField(label='email', width=300, on_change=validate, color=ft.colors.AMBER_900)
 
-rerister_ui = ft.Row(
+usersCol = requests.get(f"http://{SERVER_IP}:{SERVER_PORT}/allUsersCol").json()['count']
+
+register_ui = ft.Row(
     [
         ft.Column(
             [
-                ft.Text('Регистрация', size=25),
+                ft.Text(f"В krager уже зарегистрировались {usersCol} человек"),
+                ft.Text(" ", size=50),
+                ft.Text('Регистрация', size=28),
                 user_login,
                 user_pass,
                 user_pass_double,
@@ -135,9 +151,9 @@ rerister_ui = ft.Row(
                 ErrorMessage
             ], alignment=ft.MainAxisAlignment.CENTER
         )
-    ],
-    alignment=ft.MainAxisAlignment.CENTER
-)
+    ], alignment=ft.MainAxisAlignment.CENTER
+    )
+
 log_in_ui = ft.Row(
     [
         ft.Column(
@@ -159,7 +175,7 @@ def navigate(e):
     page.clean()
 
     if index == 0:
-        page.add(rerister_ui)
+        page.add(register_ui)
     elif index == 1:
         page.add(log_in_ui)
 
@@ -169,4 +185,7 @@ nav_bar = ft.NavigationBar(
         ft.NavigationDestination(icon=ft.icons.VERIFIED_USER_OUTLINED, label="Вход")
     ], on_change=navigate
 )
-pageUI = rerister_ui
+pageUI = register_ui
+
+def init():
+    pass

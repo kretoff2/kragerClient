@@ -3,14 +3,14 @@ import time
 import requests
 import os.path
 import flet as ft
-from pages.mobile import sign_up_and_log_in
+from pages.mobile import sign_up_and_log_in, messanger
 
 config = None
 with open('config.json', 'r') as f:
     config = json.load(f)
 
 dataStart = {
-    "page":"messanger",
+    "page":"sign_up_and_log_in",
     "staticKey":"kaka",
     "deviceID":None,
     "account":{
@@ -47,21 +47,30 @@ def save_data():
         json.dump(userData, f)
 
 def main(page:ft.Page):
-
     page.title = "krager"
-    page.favicon = "assets/kragerLogo.jpg"
     page.theme_mode = 'dark'
+    path = os.path.abspath("./assets/icon.ico")
+    page.window_icon = path
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.window_width = 600
     page.window_height = 1000
-    page.window_resizable = False
+    page.window_resizable = True
 
-    now_page = sign_up_and_log_in
-    now_page.page = page
-    now_page.userData = userData
-    page.clean()
-    page.add(now_page.pageUI)
-    if now_page.enable_nav_bar == True:
-        page.navigation_bar = now_page.nav_bar
-    page.update()
+    def open_page(now_page):
+        now_page.page = page
+        now_page.userData = userData
+        now_page.init()
+        page.clean()
+        page.add(now_page.pageUI)
+        if now_page.enable_nav_bar == True:
+            page.navigation_bar = now_page.nav_bar
+        else:
+            if page.navigation_bar != None:
+                page.navigation_bar.clean()
+        page.update()
+
+    if userData['account']['active'] == False:
+        open_page(sign_up_and_log_in)
+    else: exec(f"open_page({userData['page']})")
+
 ft.app(target=main, assets_dir="assets")
