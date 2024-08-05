@@ -117,6 +117,7 @@ btn_log = ft.Container(
     on_click=log_in,
     disabled=True
 )
+userCol = None
 def validate(e):
     if all([user_login.value, user_pass.value, user_pass_double.value, user_email.value]):
         btn_reg.disabled = False
@@ -134,25 +135,7 @@ user_pass = ft.TextField(label='Пароль', width=300, on_change=validate, pa
 user_pass_double = ft.TextField(label='Повторите пароль', width=300, on_change=validate, password=True, color=ft.colors.AMBER_900)
 user_email = ft.TextField(label='email', width=300, on_change=validate, color=ft.colors.AMBER_900)
 
-usersCol = requests.get(f"http://{SERVER_IP}:{SERVER_PORT}/allUsersCol").json()['count']
-
-register_ui = ft.Row(
-    [
-        ft.Column(
-            [
-                ft.Text(f"В krager уже зарегистрировались {usersCol} человек"),
-                ft.Text(" ", size=50),
-                ft.Text('Регистрация', size=28),
-                user_login,
-                user_pass,
-                user_pass_double,
-                user_email,
-                btn_reg,
-                ErrorMessage
-            ], alignment=ft.MainAxisAlignment.CENTER
-        )
-    ], alignment=ft.MainAxisAlignment.CENTER
-    )
+register_ui = None
 
 log_in_ui = ft.Row(
     [
@@ -188,4 +171,24 @@ nav_bar = ft.NavigationBar(
 pageUI = register_ui
 
 def init():
-    pass
+    global userCol, register_ui, pageUI
+    usersCol = requests.get(f"http://{SERVER_IP}:{SERVER_PORT}/allUsersCol").json()['count']
+    userCol = ft.Text(f"В krager уже зарегистрировались {usersCol} человек")
+    register_ui = ft.Row(
+    [
+        ft.Column(
+            [
+                userCol,
+                ft.Text(" ", size=50),
+                ft.Text('Регистрация', size=28),
+                user_login,
+                user_pass,
+                user_pass_double,
+                user_email,
+                btn_reg,
+                ErrorMessage
+            ], alignment=ft.MainAxisAlignment.CENTER
+        )
+    ], alignment=ft.MainAxisAlignment.CENTER
+    )
+    pageUI = register_ui

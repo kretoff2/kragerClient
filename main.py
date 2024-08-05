@@ -1,6 +1,4 @@
 import json
-import time
-import requests
 import os.path
 import flet as ft
 from pages.mobile import sign_up_and_log_in, messanger
@@ -69,7 +67,9 @@ def main(page:ft.Page):
                 page.navigation_bar.clean()
         page.update()
 
+    page.theme = ft.Theme(color_scheme_seed="GREEN")
     if userData['account']['active'] == False:
+        page.theme = ft.Theme(color_scheme_seed="deep purple")
         open_page(sign_up_and_log_in)
     else: exec(f"open_page({userData['page']})")
 
