@@ -3,15 +3,17 @@ import json
 import time
 import requests
 
+from pages import data
+
 SERVER_IP = "localhost"
 SERVER_PORT = 80
 
 page:ft.Page
 enable_nav_bar = True
-userData:json
+userData = data.userData
 
-user_cod = ft.TextField(label='Код', width=300, color=ft.colors.AMBER_900)
-ErrorMessage = ft.Text("",color=ft.colors.RED)
+user_cod = ft.TextField(label='Код', width=300, color=ft.colors.ON_PRIMARY, border_color=ft.colors.PRIMARY)
+ErrorMessage = ft.Text("",color=ft.colors.ERROR)
 
 enable_cod = False
 my_id = 0
@@ -98,9 +100,9 @@ def log_in(e):
     btn_log.scale = 1
     page.update()
 btn_reg = ft.Container(
-    content=ft.Row([ft.Text(value='Зарегестрироваться', color=ft.colors.AMBER_900, size=15)], alignment=ft.MainAxisAlignment.CENTER),
+    content=ft.Row([ft.Text(value='Зарегестрироваться', color=ft.colors.ON_PRIMARY_CONTAINER, size=15)], alignment=ft.MainAxisAlignment.CENTER),
     border_radius=ft.BorderRadius(5,5,5,5),
-    bgcolor=ft.colors.DEEP_PURPLE_800,
+    bgcolor=ft.colors.PRIMARY_CONTAINER,
     width=300,
     height=50,
     animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE),
@@ -108,9 +110,9 @@ btn_reg = ft.Container(
     disabled=True
 )
 btn_log = ft.Container(
-    content=ft.Row([ft.Text(value='Войти', color=ft.colors.AMBER_900, size=15)], alignment=ft.MainAxisAlignment.CENTER),
+    content=ft.Row([ft.Text(value='Войти', color=ft.colors.ON_PRIMARY_CONTAINER, size=15)], alignment=ft.MainAxisAlignment.CENTER),
     border_radius=ft.BorderRadius(5,5,5,5),
-    bgcolor=ft.colors.DEEP_PURPLE_800,
+    bgcolor=ft.colors.PRIMARY_CONTAINER,
     width=300,
     height=50,
     animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE),
@@ -130,10 +132,10 @@ def validate(e):
         btn_log.disabled = True
     page.update()
 
-user_login = ft.TextField(label='Логин', width=300, on_change=validate, color=ft.colors.AMBER_900)
-user_pass = ft.TextField(label='Пароль', width=300, on_change=validate, password=True, color=ft.colors.AMBER_900)
-user_pass_double = ft.TextField(label='Повторите пароль', width=300, on_change=validate, password=True, color=ft.colors.AMBER_900)
-user_email = ft.TextField(label='email', width=300, on_change=validate, color=ft.colors.AMBER_900)
+user_login = ft.TextField(label='Логин', width=300, on_change=validate, color=ft.colors.PRIMARY, border_color=ft.colors.PRIMARY, cursor_color=ft.colors.INVERSE_PRIMARY, focused_bgcolor=ft.colors.PRIMARY_CONTAINER)
+user_pass = ft.TextField(label='Пароль', width=300, on_change=validate, password=True, color=ft.colors.PRIMARY, border_color=ft.colors.PRIMARY, cursor_color=ft.colors.INVERSE_PRIMARY, focused_bgcolor=ft.colors.PRIMARY_CONTAINER)
+user_pass_double = ft.TextField(label='Повторите пароль', width=300, on_change=validate, password=True, color=ft.colors.PRIMARY, border_color=ft.colors.PRIMARY, cursor_color=ft.colors.INVERSE_PRIMARY, focused_bgcolor=ft.colors.PRIMARY_CONTAINER)
+user_email = ft.TextField(label='email', width=300, on_change=validate, color=ft.colors.PRIMARY, border_color=ft.colors.PRIMARY, cursor_color=ft.colors.INVERSE_PRIMARY, focused_bgcolor=ft.colors.PRIMARY_CONTAINER)
 
 register_ui = None
 

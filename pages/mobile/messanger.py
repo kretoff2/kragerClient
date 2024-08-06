@@ -3,15 +3,15 @@ import json
 import time
 
 import pages.mobile.overlay_menu
+from pages import data
 import requests
-from pages.mobile import overlay_menu
 
 SERVER_IP = "localhost"
 SERVER_PORT = 80
 
 page:ft.Page
 enable_nav_bar = False
-userData:json
+userData = data.userData
 
 pageUI = None
 
@@ -19,10 +19,11 @@ temp = {"chats":{}}
 def overlay_menu(e):
     pages.mobile.overlay_menu.page = page
     pages.mobile.overlay_menu.overlay.visible = True
+    pages.mobile.overlay_menu.userData = userData
     page.update()
 
 header = ft.Container(
-    content=ft.Row([ft.IconButton(ft.icons.MENU, icon_color=ft.colors.ON_PRIMARY, bgcolor=ft.colors.PRIMARY, icon_size=30, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE), on_click=overlay_menu),ft.Text("Krager", size=25, color=ft.colors.ON_PRIMARY)], alignment=ft.MainAxisAlignment.CENTER,spacing=50)
+    content=ft.Row([ft.IconButton(ft.icons.MENU, icon_color=ft.colors.ON_PRIMARY, bgcolor=ft.colors.PRIMARY, icon_size=30, animate_scale=ft.Animation(duration=600, curve=ft.AnimationCurve.EASE), on_click=overlay_menu),ft.Text("Krager", size=25, color=ft.colors.ON_PRIMARY)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN,spacing=50)
 )
 def openChat(chatID):
     print(chatID)
@@ -47,7 +48,7 @@ def chats():
 def init():
     global pageUI, MyChats
     page.vertical_alignment = ft.MainAxisAlignment.START
-    page.bgcolor = ft.colors.ON_PRIMARY_CONTAINER
+    page.bgcolor = ft.colors.BACKGROUND
     page.window_min_width = 400
     page.window_min_height = 200
     MyChats = chats()
