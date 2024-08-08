@@ -7,7 +7,7 @@ import time
 from pages import open_page, data
 from pages.mobile import menu
 import requests
-
+name = "global_settings"
 def save_data():
     with open('data.json', 'w') as f:
         json.dump(userData, f)
@@ -59,6 +59,9 @@ def open_view_menu(e):
     menuUI.content = viewUI
     menuUI.visible = True
     page.update()
+
+def go_to_menu(e):
+    open_page.open_page(menu, page, userData)
 
 UI = None
 def resize():
@@ -116,8 +119,8 @@ def resize():
     ])
     UI = ft.Column(
     [
-        ft.Container(content=ft.Row([ft.Icon(name=ft.icons.SETTINGS_OUTLINED, size=userData["standart_text_size_h1"], color=ft.colors.PRIMARY), ft.Text("Настройки",size=userData["standart_text_size_h2"], color=ft.colors.PRIMARY)]), bgcolor=ft.colors.PRIMARY_CONTAINER),
-        ft.Container(content=ft.Row([ft.Icon(name=ft.icons.COLOR_LENS, size=userData["standart_text_size_h3"], color=ft.colors.PRIMARY), ft.Text("Вид", color=ft.colors.PRIMARY, size=userData["standart_text_size_h4"])]), bgcolor=ft.colors.PRIMARY_CONTAINER, on_click=open_view_menu)
+        ft.Container(content=ft.Row([ft.Icon(name=ft.icons.SETTINGS_OUTLINED, size=userData["standart_text_size_h1"], color=ft.colors.PRIMARY), ft.Text("Настройки",size=userData["standart_text_size_h2"], color=ft.colors.PRIMARY), ft.IconButton(icon=ft.icons.SUBDIRECTORY_ARROW_LEFT_SHARP, icon_size=userData["standart_text_size_h1"], icon_color=ft.colors.PRIMARY, on_click=go_to_menu)], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), bgcolor=ft.colors.PRIMARY_CONTAINER),
+        ft.Container(content=ft.Row([ft.Icon(name=ft.icons.COLOR_LENS, size=userData["standart_text_size_h3"], color=ft.colors.PRIMARY), ft.Text("Вид", color=ft.colors.PRIMARY, size=userData["standart_text_size_h4"])]), bgcolor=ft.colors.PRIMARY_CONTAINER, on_click=open_view_menu),
     ], spacing=2
     )
     pageUI = ft.Stack(

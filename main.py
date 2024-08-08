@@ -56,7 +56,7 @@ def save_data():
 
 data.userData = userData
 
-from pages.mobile import sign_up_and_log_in, messanger, global_settings
+from pages.mobile import sign_up_and_log_in, messanger, global_settings, menu
 
 def main(page:ft.Page):
     page.title = "krager"

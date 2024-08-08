@@ -5,6 +5,8 @@ import requests
 
 from pages import data
 
+name = "sign_up_and_log_in"
+
 SERVER_IP = "localhost"
 SERVER_PORT = 80
 
@@ -38,7 +40,7 @@ def register(e):
         bodyJ = json.dumps(body)
         r = requests.post(f"http://{SERVER_IP}:{SERVER_PORT}/sandReg", data=bodyJ)
         if r.json()["data"]=="message_sanded":
-            ErrorMessage.value = "К вам на почту выслано письмо м кодом"
+            ErrorMessage.value = "К вам на почту выслано письмо с кодом"
             ErrorMessage.color = ft.colors.WHITE
             page.add(ft.Row([user_cod], alignment=ft.MainAxisAlignment.CENTER))
             enable_cod = True
